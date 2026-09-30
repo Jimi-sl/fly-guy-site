@@ -1,5 +1,5 @@
 (() => {
-  const API = 'https://fly-guy-back.onrender.com/api';
+  const API = 'https://api.flyguy.imgdoesit.com/api';
 
   // --- Tap Fly Guy to shoot (little hero easter egg) ---
   const guy = document.getElementById('flyguy');
