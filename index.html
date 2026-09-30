@@ -23,6 +23,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="home.css" />
+  <!-- Umami analytics (only records on flyguy.imgdoesit.com) -->
+  <script defer src="https://stats.flyguy.imgdoesit.com/fg.js" data-website-id="c32b8988-3fd1-4fd2-abe9-5b8b0f571b9f" data-domains="flyguy.imgdoesit.com"></script>
 </head>
 <body>
 
@@ -53,11 +55,11 @@
         <h1 class="logo">FLY<br />GUY</h1>
         <p class="lede">Rocket boots. Big sky. Way too many drones.<br />Dodge the walls, blast the bad guys, and put your name at the top of the board.</p>
         <div class="cta-row">
-          <a class="btn btn-play" href="play/">
+          <a class="btn btn-play" href="play/" data-umami-event="play-click" data-umami-event-button="hero">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
             Play Now
           </a>
-          <a class="btn btn-ghost" href="#leaderboard">Leaderboard</a>
+          <a class="btn btn-ghost" href="#leaderboard" data-umami-event="leaderboard-click">Leaderboard</a>
         </div>
       </div>
 
@@ -131,7 +133,7 @@
       <ol class="board-list" id="board-list">
         <li class="board-msg">Warming up the rockets…</li>
       </ol>
-      <a class="btn btn-play btn-small" href="play/">Beat them</a>
+      <a class="btn btn-play btn-small" href="play/" data-umami-event="play-click" data-umami-event-button="leaderboard">Beat them</a>
     </div>
   </section>
 
@@ -147,15 +149,15 @@
         <p>Where did the boots come from? Who keeps sending the drones? The story drops in episodes. Follow along so you don't miss one.</p>
       </div>
       <div class="socials">
-        <a class="social" href="https://www.tiktok.com/@flyguyapp" target="_blank" rel="noopener">
+        <a class="social" href="https://www.tiktok.com/@flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="tiktok">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
           TikTok
         </a>
-        <a class="social" href="https://www.instagram.com/flyguyapp" target="_blank" rel="noopener">
+        <a class="social" href="https://www.instagram.com/flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="instagram">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
           Instagram
         </a>
-        <a class="social" href="https://x.com/flyguyapp" target="_blank" rel="noopener">
+        <a class="social" href="https://x.com/flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="x">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.78L17.75 3zm-1.08 16.2h1.7L7.4 4.73H5.58L16.67 19.2z"/></svg>
           X
         </a>
@@ -171,7 +173,7 @@
     </div>
     <h2 class="final-title">Ready to fly?</h2>
     <p>No app. No sign-up. Just tap and go.</p>
-    <a class="btn btn-play btn-big" href="play/">
+    <a class="btn btn-play btn-big" href="play/" data-umami-event="play-click" data-umami-event-button="final">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
       Play Fly Guy
     </a>

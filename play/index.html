@@ -15,6 +15,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@700;800&display=swap" rel="stylesheet" />
+  <!-- Umami analytics (only records on flyguy.imgdoesit.com). fgTrack queues events until it loads. -->
+  <script>
+    window.fgTrack = function (name, data) {
+      var u = window.umami;
+      if (u && u.track) u.track(name, data);
+      else (window.fgQueue = window.fgQueue || []).push([name, data]);
+    };
+    window.fgFlush = function () {
+      var q = window.fgQueue || [];
+      window.fgQueue = [];
+      q.forEach(function (e) { window.fgTrack(e[0], e[1]); });
+    };
+  </script>
+  <script defer src="https://stats.flyguy.imgdoesit.com/fg.js" data-website-id="c32b8988-3fd1-4fd2-abe9-5b8b0f571b9f" data-domains="flyguy.imgdoesit.com" onload="fgFlush()"></script>
   <style>
     :root {
       --sky-top: #0277BD;
@@ -198,7 +212,18 @@
       var progressEl = document.getElementById('progress');
       var statusEl = document.getElementById('status');
 
+      var loaded = false;
+      var lastProgress = 0;
+      var seconds = function () { return Math.round(performance.now() / 100) / 10; };
+
+      // Visitors who leave before the game finishes loading
+      window.addEventListener('pagehide', function () {
+        if (!loaded) fgTrack('game-load-abandoned', { seconds: seconds(), progress: Math.round(lastProgress * 100) });
+      });
+
       function fail(message) {
+        if (!loaded) fgTrack('game-load-failed', { reason: String(message || 'startup error').slice(0, 100), seconds: seconds() });
+        loaded = true; // not abandoned: it failed
         loader.classList.add('failed');
         if (message) document.getElementById('error-text').textContent = message;
       }
@@ -221,9 +246,9 @@
       var buildUrl = 'Build';
       var config = {
         arguments: [],
-        dataUrl: buildUrl + '/cdef5729b7d732eafd42282a4fc820fd.data.unityweb',
-        frameworkUrl: buildUrl + '/9ae90d42102750c3beac4139af4693e8.framework.js.unityweb',
-        codeUrl: buildUrl + '/7d14961d0560f9ac6cc358e535f1c670.wasm.unityweb',
+        dataUrl: buildUrl + '/d2a2efb18d89d1247a7ea30a76914947.data.unityweb',
+        frameworkUrl: buildUrl + '/6e07b4c42215f1092bc27ee7002567a7.framework.js.unityweb',
+        codeUrl: buildUrl + '/75878099563bb64cb622a1f610e573a9.wasm.unityweb',
         streamingAssetsUrl: 'StreamingAssets',
         companyName: "Img Does It",
         productName: "Fly Guy",
@@ -234,13 +259,16 @@
       };
 
       var script = document.createElement('script');
-      script.src = buildUrl + '/27546086564b5295ff65260da837604e.loader.js';
+      script.src = buildUrl + '/e5412c7806835b1992c511dde4696222.loader.js';
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
+          lastProgress = progress;
           progressEl.style.width = Math.round(progress * 100) + '%';
           if (progress >= 0.9) statusEl.textContent = 'Almost there…';
         }).then(function (unityInstance) {
           window.unityInstance = unityInstance;
+          loaded = true;
+          fgTrack('game-loaded', { seconds: seconds() });
           loader.classList.add('done');
           setTimeout(function () { loader.remove(); }, 400);
           canvas.focus();
