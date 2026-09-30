@@ -1,25 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0277BD" />
   <title>Play Fly Guy</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+  <meta name="description" content="Play Fly Guy free in your browser. Dodge walls, blast drones and climb the global leaderboard." />
+  <meta property="og:title" content="Play Fly Guy" />
+  <meta property="og:description" content="Rocket boots. Big sky. Too many drones. Play free in your browser." />
+  <meta property="og:image" content="https://flyguy.imgdoesit.com/assets/og-image.png" />
+  <meta property="og:url" content="https://flyguy.imgdoesit.com/play/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32" href="TemplateData/favicon-32.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sky-top: #0277BD;
+      --sky: #29B6F6;
+      --sky-low: #B3E5FC;
+      --ink: #1a1a2e;
+      --flame: #FF6B35;
+      --gold: #FFC93C;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky) 55%, var(--sky-low) 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* Portrait 9:16 frame on wide screens, full screen on phones. */
+    #frame {
+      position: relative;
+      height: 100vh;
+      height: 100dvh;
+      width: min(100vw, calc(100dvh * 9 / 16));
+      background: #4FC3F7;
+      overflow: hidden;
+    }
+    @media (min-aspect-ratio: 10/16) {
+      #frame { border-inline: 4px solid var(--ink); box-shadow: 0 0 0 6px rgba(26, 26, 46, .15); }
+    }
+    #unity-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #4FC3F7;
+      touch-action: none;
+      outline: none;
+    }
+
+    /* Home link, only when there's room beside the game */
+    #home {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 5;
+      font-family: 'Righteous', sans-serif;
+      font-size: 1.05rem;
+      color: var(--ink);
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: .45rem 1rem;
+      text-decoration: none;
+      box-shadow: 0 4px 0 var(--ink);
+    }
+    #home:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+    @media (max-aspect-ratio: 12/16) { #home { display: none; } }
+
+    /* Loading screen */
+    #loader {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky) 60%, var(--sky-low) 100%);
+      transition: opacity .35s ease;
+    }
+    #loader.done { opacity: 0; pointer-events: none; }
+    .cloud { position: absolute; width: 38%; image-rendering: pixelated; opacity: .9; animation: drift 14s linear infinite; }
+    .cloud.a { top: 10%; left: -40%; }
+    .cloud.b { top: 68%; left: -40%; width: 28%; animation-duration: 10s; animation-delay: -5s; }
+    @keyframes drift { to { transform: translateX(400%); } }
+    #loader .guy { width: min(46%, 220px); animation: bob 2.6s ease-in-out infinite; filter: drop-shadow(0 0 18px rgba(255, 140, 50, .6)); position: relative; }
+    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+    #loader h1 {
+      font-family: 'Righteous', sans-serif;
+      font-weight: 400;
+      font-size: clamp(2.6rem, 11vw, 3.6rem);
+      line-height: .95;
+      letter-spacing: .03em;
+      -webkit-text-stroke: 6px var(--ink);
+      paint-order: stroke fill;
+      text-shadow: 0 6px 0 var(--ink);
+      position: relative;
+    }
+    .bar {
+      position: relative;
+      width: min(80%, 280px);
+      height: 22px;
+      background: rgba(26, 26, 46, .35);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 4px 0 var(--ink);
+    }
+    .bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: repeating-linear-gradient(-45deg, var(--flame) 0 12px, #ff8a5c 12px 24px);
+      transition: width .2s ease;
+    }
+    #status { position: relative; font-weight: 800; font-size: .95rem; text-shadow: 0 2px 0 rgba(26, 26, 46, .4); }
+
+    /* Error card */
+    #error {
+      display: none;
+      position: relative;
+      max-width: 320px;
+      background: #fff;
+      color: var(--ink);
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 0 6px 0 var(--ink);
+      padding: 1.1rem 1.2rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    #error b { font-family: 'Righteous', sans-serif; font-weight: 400; font-size: 1.3rem; display: block; margin-bottom: .3rem; }
+    #error a { color: var(--flame); }
+    #loader.failed .bar, #loader.failed #status { display: none; }
+    #loader.failed #error { display: block; }
+
+    /* Short-lived notices from Unity (warnings) */
+    #banner { position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 4; font-size: .85rem; }
+    #banner div { background: var(--gold); color: var(--ink); border: 2px solid var(--ink); border-radius: 10px; padding: 6px 10px; margin-top: 6px; }
+
+    @media (prefers-reduced-motion: reduce) { .cloud, #loader .guy { animation: none; } }
+  </style>
 </head>
 <body>
-  <!-- Placeholder: the Unity WebGL build will replace this page. -->
-  <section class="final" style="min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;border-top:0">
-    <div class="sky" aria-hidden="true">
-      <img class="cloud c1" src="../assets/cloud-1.png" alt="" />
-      <img class="cloud c3" src="../assets/cloud-3.png" alt="" />
+  <a id="home" href="../">← Home</a>
+
+  <div id="frame">
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+    <div id="loader">
+      <img class="cloud a" src="TemplateData/cloud-1.png" alt="" />
+      <img class="cloud b" src="TemplateData/cloud-2.png" alt="" />
+      <img class="guy" src="TemplateData/flyguy.png" alt="" />
+      <h1>FLY GUY</h1>
+      <div class="bar"><i id="progress"></i></div>
+      <p id="status">Fuelling the rocket boots…</p>
+      <div id="error">
+        <b>Can't take off</b>
+        <span id="error-text">This browser couldn't start the game.</span>
+        <p style="margin-top:.5rem">If you opened this from TikTok, Instagram or X, tap <strong>⋯</strong> and choose <strong>Open in browser</strong>. Or try Chrome or Safari.</p>
+        <p style="margin-top:.5rem"><a href="../">Back to home</a></p>
+      </div>
     </div>
-    <h2 class="final-title">Almost ready…</h2>
-    <p>Fly Guy is fuelling up. The game lands here soon.</p>
-    <a class="btn btn-ghost" href="../">Back to home</a>
-  </section>
+
+    <div id="banner"></div>
+  </div>
+
+  <script>
+    // Ad bridge used by AdManager.cs (via FlyGuyAds.jslib).
+    // No ad network is connected yet: rewarded ads report "not ready" (so the
+    // Continue button stays hidden) and interstitials finish immediately.
+    // To enable ads, replace these functions, e.g. with AdSense H5 Games Ads' adBreak().
+    window.flyGuyAds = window.flyGuyAds || {
+      prepareRewarded: function () {},
+      isRewardedReady: function () { return false; },
+      showRewarded: function (done) { done('unavailable'); },
+      showInterstitial: function (done) { done(); }
+    };
+
+    (function () {
+      var canvas = document.getElementById('unity-canvas');
+      var loader = document.getElementById('loader');
+      var progressEl = document.getElementById('progress');
+      var statusEl = document.getElementById('status');
+
+      function fail(message) {
+        loader.classList.add('failed');
+        if (message) document.getElementById('error-text').textContent = message;
+      }
+
+      function showBanner(msg, type) {
+        if (type === 'error') { fail(String(msg).replace(/<[^>]*>/g, '')); return; }
+        var banner = document.getElementById('banner');
+        var div = document.createElement('div');
+        div.textContent = String(msg).replace(/<[^>]*>/g, '');
+        banner.appendChild(div);
+        setTimeout(function () { div.remove(); }, 5000);
+      }
+
+      var probe = document.createElement('canvas');
+      if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) {
+        fail("This browser doesn't support WebGL, which the game needs.");
+        return;
+      }
+
+      var buildUrl = 'Build';
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + '/f8ae3b1776c55c3f0ef5492a5d7923e7.data.unityweb',
+        frameworkUrl: buildUrl + '/9ae90d42102750c3beac4139af4693e8.framework.js.unityweb',
+        codeUrl: buildUrl + '/cd91f9cb14ac8a1c5815200d1ae35b62.wasm.unityweb',
+        streamingAssetsUrl: 'StreamingAssets',
+        companyName: "Img Does It",
+        productName: "Fly Guy",
+        productVersion: "1.0",
+        showBanner: showBanner,
+        // Crisp on high-DPI phones without rendering at 3x.
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2)
+      };
+
+      var script = document.createElement('script');
+      script.src = buildUrl + '/81f9eaa98241badfe8043baefcad7d32.loader.js';
+      script.onload = function () {
+        createUnityInstance(canvas, config, function (progress) {
+          progressEl.style.width = Math.round(progress * 100) + '%';
+          if (progress >= 0.9) statusEl.textContent = 'Almost there…';
+        }).then(function (unityInstance) {
+          window.unityInstance = unityInstance;
+          loader.classList.add('done');
+          setTimeout(function () { loader.remove(); }, 400);
+          canvas.focus();
+        }).catch(function (message) {
+          console.error(message);
+          fail();
+        });
+      };
+      script.onerror = function () { fail('The game files failed to download. Check your connection and refresh.'); };
+      document.body.appendChild(script);
+    })();
+  </script>
 </body>
 </html>
