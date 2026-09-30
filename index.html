@@ -3,242 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fly Guy — Rocket Arcade Game</title>
+  <title>Fly Guy — Play Free in Your Browser</title>
+  <meta name="description" content="A Black boy with rocket boots takes to the skies. Dodge walls, blast drones and climb the global leaderboard. Play free in your browser." />
+  <meta name="theme-color" content="#0288D1" />
 
-  <!-- Open Graph -->
+  <!-- Open Graph / social previews -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://jimi-sl.github.io/fly-guy-site/" />
-  <meta property="og:title" content="Fly Guy — Rocket Arcade Game" />
-  <meta property="og:description" content="A Black boy with rocket boots takes to the skies. Dodge walls, shoot enemies and climb the global leaderboard." />
+  <meta property="og:url" content="https://flyguy.imgdoesit.com/" />
+  <meta property="og:title" content="Fly Guy — Play Free in Your Browser" />
+  <meta property="og:description" content="Rocket boots. Big sky. Too many drones. Dodge, shoot and climb the global leaderboard." />
+  <meta property="og:image" content="https://flyguy.imgdoesit.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@flyguyapp" />
 
-  <!-- General -->
-  <meta name="description" content="A Black boy with rocket boots takes to the skies. Dodge walls, shoot enemies and climb the global leaderboard." />
-  <meta name="keywords" content="fly guy, arcade game, mobile game, rocket, dodge, shoot, leaderboard, android, ios" />
-  <meta name="author" content="Fly Guy" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
 
-  <link href="https://fonts.googleapis.com" rel="preconnect" />
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <style type="text/tailwindcss">
-    :root {
-      --sky: #4FC3F7;
-      --sky-dark: #0288D1;
-      --sky-light: #E1F5FE;
-      --accent: #FF6B35;
-      --text: #1a1a2e;
-    }
-    body {
-      font-family: 'Manrope', sans-serif;
-      background-color: var(--sky-light);
-      color: var(--text);
-    }
-    h1, h2, h3, .font-game {
-      font-family: 'Righteous', cursive;
-    }
-    .hero-gradient {
-      background: linear-gradient(135deg, #0288D1 0%, #4FC3F7 100%);
-    }
-    .btn-primary {
-      @apply bg-[#FF6B35] text-white font-bold rounded-full shadow-lg hover:bg-[#e55a25] transition-all duration-300 transform hover:-translate-y-1;
-    }
-    .btn-secondary {
-      @apply bg-white text-[#0288D1] font-bold rounded-full shadow-lg hover:bg-[#E1F5FE] transition-all duration-300 transform hover:-translate-y-1;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="home.css" />
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-  <!-- Nav -->
-  <header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-[#B3E5FC] bg-white/80 px-6 md:px-10 py-4 backdrop-blur-sm">
-    <div class="flex items-center gap-3">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="16" cy="16" r="16" fill="#0288D1"/>
-        <path d="M16 6 L20 18 L16 15 L12 18 Z" fill="white"/>
-        <circle cx="16" cy="20" r="3" fill="#FF6B35"/>
-      </svg>
-      <h2 class="text-2xl font-game text-[#0288D1] tracking-wider">FLY GUY</h2>
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="top">
+    <div class="sky" aria-hidden="true">
+      <img class="cloud c1" src="assets/cloud-1.png" alt="" />
+      <img class="cloud c2" src="assets/cloud-2.png" alt="" />
+      <img class="cloud c3" src="assets/cloud-3.png" alt="" />
+      <img class="cloud c4" src="assets/cloud-1.png" alt="" />
+      <img class="cloud c5" src="assets/cloud-3.png" alt="" />
     </div>
-    <nav class="hidden md:flex items-center gap-8">
-      <a class="text-base font-medium text-[var(--text)] hover:text-[#0288D1] transition-colors" href="#features">Features</a>
-      <a class="text-base font-medium text-[var(--text)] hover:text-[#0288D1] transition-colors" href="#how-to-play">How to Play</a>
-      <a class="text-base font-medium text-[var(--text)] hover:text-[#0288D1] transition-colors" href="#download">Download</a>
-    </nav>
-    <a class="btn-primary flex items-center justify-center h-11 px-6 text-sm" href="#download">
-      Play Now
+
+    <header class="topbar">
+      <a class="brand" href="#top">FLY GUY</a>
+      <div class="hud" aria-hidden="true">
+        <span class="hud-lives">
+          <img src="assets/health.png" alt="" /><img src="assets/health.png" alt="" /><img src="assets/health.png" alt="" />
+        </span>
+        <span class="hud-ammo"><img src="assets/ammo.png" alt="" /><b id="hud-ammo">10</b></span>
+        <span class="hud-score"><b id="hud-score">0</b></span>
+      </div>
+    </header>
+
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="kicker">Free · No download · Plays in your browser</p>
+        <h1 class="logo">FLY<br />GUY</h1>
+        <p class="lede">Rocket boots. Big sky. Way too many drones.<br />Dodge the walls, blast the bad guys, and put your name at the top of the board.</p>
+        <div class="cta-row">
+          <a class="btn btn-play" href="play/">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
+            Play Now
+          </a>
+          <a class="btn btn-ghost" href="#leaderboard">Leaderboard</a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <button class="flyguy" id="flyguy" type="button" aria-label="Tap Fly Guy to shoot">
+          <img src="assets/flyguy.png" alt="Fly Guy, a boy with an afro, black cap and rocket boots, flying upward" width="460" height="588" />
+        </button>
+        <div class="bullets" id="bullets" aria-hidden="true"></div>
+        <p class="tap-hint" aria-hidden="true">tap him ↑</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>DODGE</span><i>✦</i><span>SHOOT</span><i>✦</i><span>FLY</span><i>✦</i><span>REPEAT</span><i>✦</i>
+      <span>DODGE</span><i>✦</i><span>SHOOT</span><i>✦</i><span>FLY</span><i>✦</i><span>REPEAT</span><i>✦</i>
+      <span>DODGE</span><i>✦</i><span>SHOOT</span><i>✦</i><span>FLY</span><i>✦</i><span>REPEAT</span><i>✦</i>
+      <span>DODGE</span><i>✦</i><span>SHOOT</span><i>✦</i><span>FLY</span><i>✦</i><span>REPEAT</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ===== HOW TO PLAY ===== -->
+  <section class="section how" id="how-to-play">
+    <h2 class="section-title">How to Play</h2>
+    <p class="section-sub">Ten seconds to learn. Forever to master.</p>
+
+    <div class="cards">
+      <article class="card tilt-l">
+        <div class="card-art"><img class="art-guy" src="assets/flyguy.png" alt="" /></div>
+        <h3>Steer</h3>
+        <p>Slide Fly Guy left and right through the gaps. The sky speeds up the longer you survive.</p>
+        <ul class="controls">
+          <li><span class="chip">Phone</span> Drag</li>
+          <li><span class="chip">Desktop</span> <kbd>←</kbd> <kbd>→</kbd> or drag</li>
+        </ul>
+      </article>
+
+      <article class="card tilt-r">
+        <div class="card-art art-blast">
+          <div class="mini-walls"><img src="assets/wall.png" alt="" /><img class="target" src="assets/wall-break.png" alt="" /><img src="assets/wall.png" alt="" /></div>
+          <img class="art-bullet" src="assets/bullet.png" alt="" />
+        </div>
+        <h3>Blast</h3>
+        <p>Shoot down drones for +100. Orange walls crack when you hit them. Grey walls don't, so go around.</p>
+        <ul class="controls">
+          <li><span class="chip">Phone</span> Double-tap</li>
+          <li><span class="chip">Desktop</span> <kbd>Space</kbd></li>
+        </ul>
+      </article>
+
+      <article class="card tilt-l">
+        <div class="card-art"><img class="art-pick" src="assets/health.png" alt="" /><img class="art-pick" src="assets/ammo.png" alt="" /></div>
+        <h3>Grab</h3>
+        <p>Hearts keep you flying. Gold coins refill your ammo. Miss them and you'll be sorry.</p>
+        <ul class="controls">
+          <li><span class="chip">Tip</span> Ammo runs out fast</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== LEADERBOARD ===== -->
+  <section class="section board-wrap" id="leaderboard">
+    <div class="board">
+      <div class="board-head">
+        <h2>Top Flyers</h2>
+        <span class="live-dot">LIVE</span>
+      </div>
+      <ol class="board-list" id="board-list">
+        <li class="board-msg">Warming up the rockets…</li>
+      </ol>
+      <a class="btn btn-play btn-small" href="play/">Beat them</a>
+    </div>
+  </section>
+
+  <!-- ===== STORY ===== -->
+  <section class="section story" id="story">
+    <div class="story-art">
+      <img src="assets/flyguy.png" alt="" />
+    </div>
+    <div class="story-copy">
+      <h2 class="section-title left">Who is Fly Guy?</h2>
+      <div class="bubble">
+        <p>One kid. One pair of rocket boots. One <em>very</em> big sky.</p>
+        <p>Where did the boots come from? Who keeps sending the drones? The story drops in episodes. Follow along so you don't miss one.</p>
+      </div>
+      <div class="socials">
+        <a class="social" href="https://www.tiktok.com/@flyguyapp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+          TikTok
+        </a>
+        <a class="social" href="https://www.instagram.com/flyguyapp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
+          Instagram
+        </a>
+        <a class="social" href="https://x.com/flyguyapp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.78L17.75 3zm-1.08 16.2h1.7L7.4 4.73H5.58L16.67 19.2z"/></svg>
+          X
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="final">
+    <div class="sky" aria-hidden="true">
+      <img class="cloud c2" src="assets/cloud-2.png" alt="" />
+      <img class="cloud c3" src="assets/cloud-3.png" alt="" />
+    </div>
+    <h2 class="final-title">Ready to fly?</h2>
+    <p>No app. No sign-up. Just tap and go.</p>
+    <a class="btn btn-play btn-big" href="play/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
+      Play Fly Guy
     </a>
-  </header>
-
-  <!-- Hero -->
-  <section class="relative text-white" id="hero">
-    <div class="hero-gradient">
-      <div class="container mx-auto px-6 lg:px-8 py-40 md:py-52 text-center relative overflow-hidden">
-        <div class="absolute -bottom-10 left-0 right-0">
-          <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,64L40,80C80,96,160,128,240,128C320,128,400,96,480,85.3C560,75,640,85,720,90.7C800,96,880,96,960,90.7C1040,85,1120,75,1200,64C1280,53,1360,43,1400,37.3L1440,32L1440,120L1400,120C1360,120,1280,120,1200,120C1120,120,1040,120,960,120C880,120,800,120,720,120C640,120,560,120,480,120C400,120,320,120,240,120C160,120,80,120,40,120L0,120Z" fill="#E1F5FE" fill-opacity="1"></path>
-          </svg>
-        </div>
-        <div class="relative z-10">
-          <h1 class="text-6xl md:text-8xl font-game leading-tight tracking-widest drop-shadow-lg">
-            FLY GUY
-          </h1>
-          <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl font-light leading-relaxed drop-shadow-md">
-            A Black boy with rocket boots takes to the skies. Dodge walls, shoot enemies and climb the global leaderboard.
-          </p>
-          <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#download" class="btn-primary inline-flex items-center justify-center gap-3 h-14 px-8 text-lg">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3.18 23.76c.3.17.64.24.99.2l13.5-7.79-2.79-2.79-11.7 10.38zM.54 1.18C.2 1.5 0 2.04 0 2.73v18.54c0 .69.2 1.23.54 1.55l.08.08 10.39-10.39v-.24L.62 1.1l-.08.08zM20.7 10.4l-2.96-1.71-3.13 3.13 3.13 3.13 2.98-1.72c.85-.49.85-1.29-.02-1.83zM4.17.24L17.67 8.03l-2.79 2.79L3.18.24C3.5.07 3.87.1 4.17.24z"/></svg>
-              Google Play
-            </a>
-            <a href="#download" class="btn-secondary inline-flex items-center justify-center gap-3 h-14 px-8 text-lg">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-              App Store
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
-  <!-- Features -->
-  <section class="py-24 bg-[#E1F5FE]" id="features">
-    <div class="container mx-auto px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-game text-[#0288D1]">Built Different</h2>
-        <p class="mt-4 text-lg text-[var(--text)] max-w-2xl mx-auto">Fast-paced arcade action with a hero you don't see every day.</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2">
-          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-[#E1F5FE] text-[#0288D1] mb-6">
-            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <h3 class="text-xl font-game mb-2 text-[#0288D1]">Rocket Boots</h3>
-          <p class="text-[var(--text)] text-sm">Fly left and right with smooth rocket-powered controls. Speed increases the further you fly.</p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2">
-          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-[#E1F5FE] text-[#0288D1] mb-6">
-            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-          </div>
-          <h3 class="text-xl font-game mb-2 text-[#0288D1]">Shoot Enemies</h3>
-          <p class="text-[var(--text)] text-sm">Double tap to fire at enemy drones. Take them down for bonus points and keep your ammo stocked.</p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2">
-          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-[#E1F5FE] text-[#0288D1] mb-6">
-            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-          </div>
-          <h3 class="text-xl font-game mb-2 text-[#0288D1]">Global Leaderboard</h3>
-          <p class="text-[var(--text)] text-sm">Compete with players worldwide. Set your display name and claim your spot at the top.</p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-2">
-          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-[#E1F5FE] text-[#0288D1] mb-6">
-            <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-          </div>
-          <h3 class="text-xl font-game mb-2 text-[#0288D1]">Pickups & Lives</h3>
-          <p class="text-[var(--text)] text-sm">Collect health and ammo pickups mid-flight. Watch an ad to continue after a close run.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- How to Play -->
-  <section class="py-24 bg-white" id="how-to-play">
-    <div class="container mx-auto px-6 lg:px-8">
-      <div class="text-center mb-20">
-        <h2 class="text-4xl md:text-5xl font-game text-[#0288D1]">How to Play</h2>
-        <p class="mt-4 text-lg text-[var(--text)] max-w-2xl mx-auto">Simple to pick up. Impossible to put down.</p>
-      </div>
-      <div class="relative">
-        <div aria-hidden="true" class="hidden md:block absolute top-14 left-0 w-full h-1.5 bg-[#E1F5FE] rounded-full"></div>
-        <div aria-hidden="true" class="hidden md:block absolute top-14 left-0 w-full h-1.5 bg-[#4FC3F7] rounded-full animate-pulse"></div>
-        <div class="relative grid grid-cols-1 md:grid-cols-3 gap-16">
-
-          <div class="text-center">
-            <div class="relative flex items-center justify-center w-28 h-28 mx-auto bg-[#0288D1] rounded-full text-white text-5xl font-game mb-6 shadow-lg border-4 border-white">1</div>
-            <h3 class="text-2xl font-game mb-2 text-[#0288D1]">Drag to Fly</h3>
-            <p class="text-[var(--text)]">Drag left or right to steer Fly Guy through the sky. Lift your finger to stop.</p>
-          </div>
-
-          <div class="text-center">
-            <div class="relative flex items-center justify-center w-28 h-28 mx-auto bg-[#0288D1] rounded-full text-white text-5xl font-game mb-6 shadow-lg border-4 border-white">2</div>
-            <h3 class="text-2xl font-game mb-2 text-[#0288D1]">Double Tap to Shoot</h3>
-            <p class="text-[var(--text)]">Double tap anywhere to fire bullets at enemy drones coming your way.</p>
-          </div>
-
-          <div class="text-center">
-            <div class="relative flex items-center justify-center w-28 h-28 mx-auto bg-[#0288D1] rounded-full text-white text-5xl font-game mb-6 shadow-lg border-4 border-white">3</div>
-            <h3 class="text-2xl font-game mb-2 text-[#0288D1]">Climb the Board</h3>
-            <p class="text-[var(--text)]">Survive as long as possible, rack up points and beat everyone on the leaderboard.</p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA / Download -->
-  <section class="py-24 hero-gradient relative" id="download">
-    <div class="absolute -top-1 left-0 w-full h-12">
-      <svg viewBox="0 0 1200 100" preserveAspectRatio="none" class="w-full h-full">
-        <path d="M0,50 Q150,20 300,50 T600,50 T900,50 T1200,50 L1200,0 L0,0 Z" fill="white"/>
-      </svg>
-    </div>
-    <div class="container mx-auto px-6 lg:px-8 text-center text-white relative z-10">
-      <h2 class="text-4xl md:text-6xl font-game drop-shadow-lg">Ready to Fly?</h2>
-      <p class="mt-6 text-lg max-w-xl mx-auto drop-shadow opacity-90">Download Fly Guy for free and claim your spot on the global leaderboard.</p>
-      <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#" class="btn-primary inline-flex items-center justify-center gap-3 h-14 px-8 text-lg">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3.18 23.76c.3.17.64.24.99.2l13.5-7.79-2.79-2.79-11.7 10.38zM.54 1.18C.2 1.5 0 2.04 0 2.73v18.54c0 .69.2 1.23.54 1.55l.08.08 10.39-10.39v-.24L.62 1.1l-.08.08zM20.7 10.4l-2.96-1.71-3.13 3.13 3.13 3.13 2.98-1.72c.85-.49.85-1.29-.02-1.83zM4.17.24L17.67 8.03l-2.79 2.79L3.18.24C3.5.07 3.87.1 4.17.24z"/></svg>
-          Google Play
-        </a>
-        <a href="#" class="btn-secondary inline-flex items-center justify-center gap-3 h-14 px-8 text-lg">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          App Store
-        </a>
-      </div>
-    </div>
-    <div class="absolute -bottom-1 left-0 w-full h-12">
-      <svg viewBox="0 0 1200 100" preserveAspectRatio="none" class="w-full h-full">
-        <path d="M0,30 Q200,60 400,30 T800,30 T1200,30 L1200,100 L0,100 Z" fill="#E1F5FE"/>
-      </svg>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-[#E1F5FE] text-[var(--text)]">
-    <div class="container mx-auto px-6 lg:px-8 py-12">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="flex items-center gap-3 mb-6 md:mb-0">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#0288D1"/><path d="M16 6 L20 18 L16 15 L12 18 Z" fill="white"/><circle cx="16" cy="20" r="3" fill="#FF6B35"/></svg>
-          <h2 class="text-xl font-game text-[#0288D1]">FLY GUY</h2>
-        </div>
-        <nav class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
-          <a class="text-sm hover:text-[#0288D1] transition-colors" href="#features">Features</a>
-          <a class="text-sm hover:text-[#0288D1] transition-colors" href="#how-to-play">How to Play</a>
-          <a class="text-sm hover:text-[#0288D1] transition-colors" href="privacy.html">Privacy Policy</a>
-          <a class="text-sm hover:text-[#0288D1] transition-colors" href="mailto:flyguygameapp@proton.me">Support</a>
-        </nav>
-        <div class="flex gap-5">
-          <a class="hover:text-[#0288D1] transition-colors" href="https://x.com/flyguyapp" target="_blank">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.48 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.45,16.03 6.13,17.26 8.1,17.3C6.63,18.45 4.81,19.12 2.83,19.12C2.47,19.12 2.12,19.1 1.77,19.05C3.78,20.36 6.15,21.13 8.75,21.13C16.01,21.13 20.24,15.39 20.24,10.03C20.24,9.84 20.24,9.66 20.23,9.47C21.01,8.91 21.78,8.19 22.46,7.35V7.34L22.46,6Z"/></svg>
-          </a>
-          <a class="hover:text-[#0288D1] transition-colors" href="https://www.instagram.com/flyguyapp" target="_blank">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
-          </a>
-          <a class="hover:text-[#0288D1] transition-colors" href="https://www.tiktok.com/@flyguyapp" target="_blank">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div class="mt-8 pt-8 border-t border-[#B3E5FC] text-center text-sm">
-        <p>© 2026 Fly Guy. All rights reserved.</p>
-      </div>
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand brand-dark" href="#top">FLY GUY</a>
+      <nav>
+        <a href="#how-to-play">How to play</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:flyguygameapp@proton.me">Support</a>
+      </nav>
+      <p class="fine">© 2026 Fly Guy · an <a href="https://imgdoesit.com">imgdoesit</a> project</p>
     </div>
   </footer>
 
+  <script src="home.js"></script>
 </body>
 </html>
