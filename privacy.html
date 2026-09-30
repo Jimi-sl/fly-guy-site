@@ -4,80 +4,120 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy — Fly Guy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="How Fly Guy handles your data: guest accounts, the public leaderboard, browser storage and cookie-free analytics." />
+  <meta name="theme-color" content="#0288D1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="home.css" />
+  <!-- Umami analytics (only records on flyguy.imgdoesit.com) -->
+  <script defer src="https://stats.flyguy.imgdoesit.com/fg.js" data-website-id="c32b8988-3fd1-4fd2-abe9-5b8b0f571b9f" data-domains="flyguy.imgdoesit.com"></script>
 </head>
 <body>
 
-  <header>
-    <h1>FLY GUY</h1>
-    <p class="tagline">Privacy Policy</p>
+  <header class="doc-hero">
+    <div class="topbar">
+      <a class="brand" href="./">FLY GUY</a>
+      <a class="btn btn-play btn-small" href="play/">Play</a>
+    </div>
+    <h1 class="doc-title">Privacy Policy</h1>
+    <p class="doc-updated">Last updated: 1 October 2026</p>
   </header>
 
-  <main class="policy">
+  <main class="doc">
 
-    <p class="updated">Last updated: May 2025</p>
-    <p>This Privacy Policy describes how Fly Guy ("we", "us", or "our") collects, uses, and shares information when you use our mobile game Fly Guy ("the App").</p>
+    <p class="doc-summary"><strong>The short version:</strong> you play as a guest, with no email or real name needed. We store your display name and scores so the leaderboard works. We count visits and game events with our own cookie-free analytics. We don't show ads right now, and we never sell your data.</p>
 
-    <h2>Information We Collect</h2>
-    <h3>Information You Provide</h3>
+    <p>This policy explains how Fly Guy ("we", "us"), an <a href="https://imgdoesit.com">imgdoesit</a> project, handles information when you visit <strong>flyguy.imgdoesit.com</strong> or play the Fly Guy browser game.</p>
+
+    <h2>What we collect</h2>
+
+    <h3>Your guest account</h3>
+    <p>The first time you open the game, it creates a guest account for you automatically. This account includes:</p>
     <ul>
-      <li><strong>Display name</strong> — a name you choose to appear on the leaderboard. This does not need to be your real name.</li>
+      <li><strong>A random username and password.</strong> The game generates these; you never see them. We store the password only in scrambled (hashed) form.</li>
+      <li><strong>Your display name.</strong> This is the name you choose, or one we pick for you, such as <em>FlyGuy_1234</em>. It doesn't need to be your real name, and we recommend it isn't.</li>
+      <li><strong>Your game stats:</strong> scores, enemies defeated, how long each run lasted, how many games you've played, your best score, and when you created your account and last played.</li>
     </ul>
+    <p>We don't ask for your email, phone number, real name, age or location.</p>
 
-    <h3>Information Collected Automatically</h3>
+    <h3>Analytics</h3>
+    <p>We use <a href="https://umami.is" target="_blank" rel="noopener">Umami</a>, an analytics tool we run on our own server, to understand how people find and play the game. It records:</p>
     <ul>
-      <li><strong>Game data</strong> — your scores, enemies defeated, and games played, used to power the global leaderboard.</li>
-      <li><strong>Device information</strong> — basic device data collected by our advertising partner Google AdMob, including advertising ID, device type, and OS version.</li>
+      <li>Pages visited, the site that sent you (for example TikTok or Instagram), your browser, operating system, device type, screen size and country.</li>
+      <li>Game events: how long the game took to load, whether loading failed or was abandoned, when a run starts and ends, and the score, kills and length of each run.</li>
     </ul>
+    <p>Umami <strong>doesn't use cookies</strong>, doesn't store your IP address, and doesn't follow you across other websites. The data stays on our server and isn't shared with anyone.</p>
 
-    <h2>How We Use Your Information</h2>
+    <h3>Server logs</h3>
+    <p>Like most websites, our game server keeps short technical logs of requests. These include IP addresses, and we use them to stop abuse, such as spam accounts or fake scores, and to fix problems. They're deleted automatically after about two weeks.</p>
+
+    <h2>What's public</h2>
+    <p>Your <strong>display name, best score and number of enemies defeated</strong> appear on the public leaderboard, in the game and on our homepage. Please don't use your real name or anything personal as your display name. We may remove or change names that are offensive.</p>
+
+    <h2>What's stored in your browser</h2>
+    <p>The game saves a few things in your browser's storage, not in cookies, so it remembers you next time:</p>
     <ul>
-      <li>To display your scores on the global leaderboard</li>
-      <li>To save your progress and high score locally on your device</li>
-      <li>To serve advertisements through Google AdMob</li>
-      <li>To improve the game experience</li>
+      <li>A sign-in token that connects your browser to your guest account</li>
+      <li>Your display name, your best score on this device, and your settings</li>
+      <li>A copy of the game files, so it loads faster on later visits</li>
+    </ul>
+    <p>If you clear your browser's site data, or play in a private window, the game starts a fresh guest account. We can't link your old one back to you automatically.</p>
+
+    <h2>Services we rely on</h2>
+    <ul>
+      <li><strong>GitHub Pages</strong> hosts this website. GitHub may log visitors' IP addresses for security. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's privacy statement</a>.</li>
+      <li><strong>Google Fonts</strong> supplies the fonts, so your browser connects to Google to download them. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>.</li>
+      <li>The game server (accounts, scores and leaderboard) and our analytics run on <strong>a server we manage ourselves</strong>. Our hosting provider supplies the machine but doesn't use this data, and no other company processes it for us.</li>
     </ul>
 
     <h2>Advertising</h2>
-    <p>Fly Guy uses Google AdMob to serve advertisements. AdMob may collect and use data to show you personalised ads based on your interests, including your device's advertising ID.</p>
-    <p>You can opt out of personalised advertising at any time:</p>
+    <p>Fly Guy <strong>doesn't currently show ads</strong>. If we add them in the future, for example so you can watch an ad to continue a run, we'll update this policy first. Where the law requires it, we'll ask for your consent before any ad-related cookies or tracking are used.</p>
+
+    <h2>How we use your information</h2>
     <ul>
-      <li><strong>Android:</strong> Settings → Google → Ads → Opt out of Ads Personalisation</li>
-      <li><strong>iOS:</strong> Settings → Privacy → Tracking → disable for Fly Guy</li>
+      <li>To run your guest account and save your scores</li>
+      <li>To show the leaderboard</li>
+      <li>To prevent cheating, spam and abuse</li>
+      <li>To understand what's working, such as load times and how long people play, and to improve the game</li>
     </ul>
-    <p>For more information on how Google uses data, visit: <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+    <p>We <strong>never sell</strong> your information or share it for advertising.</p>
 
-    <h2>Data Storage</h2>
-    <p>Your display name and game scores are stored securely on our servers hosted by Render (render.com). Your high score and settings are also stored locally on your device. We do not sell your personal data to third parties.</p>
+    <h2>How long we keep it</h2>
+    <p>We keep your guest account and scores while the game is running, or until you ask us to delete them. Analytics data is kept in aggregate to track trends over time. Server logs are deleted after about two weeks.</p>
 
-    <h2>Children's Privacy</h2>
-    <p>Fly Guy is intended for general audiences. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us and we will delete it.</p>
+    <h2>Children</h2>
+    <p>Fly Guy is for all ages, and you can play without giving us any personal information. We don't knowingly collect personal information from children. If you think a child has put personal details in their display name, contact us and we'll remove them.</p>
 
-    <h2>Data Retention</h2>
-    <p>We retain your game data for as long as you use the app. You can request deletion of your data at any time by contacting us.</p>
-
-    <h2>Your Rights</h2>
+    <h2>Your rights</h2>
+    <p>Depending on where you live, including under the UK and EU GDPR, you can ask us to:</p>
     <ul>
-      <li>Access the data we hold about you</li>
-      <li>Request correction of your display name</li>
-      <li>Request deletion of your account and data</li>
+      <li>Tell you what data we hold about you</li>
+      <li>Correct your display name, which you can also change yourself in the game's Settings</li>
+      <li>Delete your account and scores</li>
     </ul>
+    <p>Email us at the address below. Include your display name and roughly your best score, so we can find your account. Guest accounts aren't linked to an email address, so this helps us make sure we delete the right one. You also have the right to complain to your local data protection authority.</p>
 
-    <h2>Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the date at the top of this page.</p>
+    <h2>Changes to this policy</h2>
+    <p>If we change how we handle data, we'll update this page and the date at the top.</p>
 
-    <h2>Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-jimi    <p><strong>Email:</strong> <a href="mailto:flyguygameapp@proton.me">flyguygameapp@proton.me</a></p>
+    <h2>Contact</h2>
+    <p>Questions or requests: <a href="mailto:flyguygameapp@proton.me">flyguygameapp@proton.me</a></p>
 
   </main>
 
-  <footer>
-    <p>© 2025 Fly Guy. All rights reserved.</p>
-    <a href="index.html">Home</a>
-    <span> · </span>
-    <a href="mailto:flyguygameapp@proton.me">Support</a>
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand brand-dark" href="./">FLY GUY</a>
+      <nav>
+        <a href="./#how-to-play">How to play</a>
+        <a href="./#leaderboard">Leaderboard</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:flyguygameapp@proton.me">Support</a>
+      </nav>
+      <p class="fine">© 2026 Fly Guy · an <a href="https://imgdoesit.com">imgdoesit</a> project</p>
+    </div>
   </footer>
 
 </body>
