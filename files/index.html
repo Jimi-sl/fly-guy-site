@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Fly Guy Files — Coming Soon</title>
+  <meta name="description" content="The Fly Guy comic: an alien landlord is renting out the sky, and one kid with rocket boots says no. Issue #1 is coming soon." />
+  <meta name="theme-color" content="#0288D1" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://flyguy.imgdoesit.com/files/" />
+  <meta property="og:title" content="The Fly Guy Files — Coming Soon" />
+  <meta property="og:description" content="The sky is for sale. Issue #1: Sold Out is coming soon." />
+  <meta property="og:image" content="https://flyguy.imgdoesit.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@flyguyapp" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../home.css" />
+  <!-- Umami analytics (only records on flyguy.imgdoesit.com) -->
+  <script defer src="https://stats.flyguy.imgdoesit.com/fg.js" data-website-id="c32b8988-3fd1-4fd2-abe9-5b8b0f571b9f" data-domains="flyguy.imgdoesit.com"></script>
+</head>
+<body>
+
+  <header class="files-hero">
+    <div class="sky" aria-hidden="true">
+      <img class="cloud c1" src="../assets/cloud-1.png" alt="" />
+      <img class="cloud c3" src="../assets/cloud-3.png" alt="" />
+    </div>
+    <div class="topbar">
+      <a class="brand" href="../">FLY GUY</a>
+      <a class="btn btn-play btn-small" href="../play/" data-umami-event="play-click" data-umami-event-button="files">Play</a>
+    </div>
+    <div class="files-hero-inner">
+      <p class="kicker">A comic that moves</p>
+      <h1 class="files-title">THE FLY GUY FILES</h1>
+      <p class="files-lede">An alien landlord is renting out the sky. One kid with his grandfather's rocket boots says no.</p>
+      <p class="files-status">Issue #1 is coming soon. New parts every Monday, Wednesday and Friday.</p>
+    </div>
+  </header>
+
+  <main class="section files">
+    <h2 class="section-title">Season 1: Nobody Fences the Sky</h2>
+    <p class="section-sub">8 issues. Follow along so you don't miss the first one.</p>
+
+    <div class="socials files-socials">
+      <a class="social" href="https://www.tiktok.com/@flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="tiktok">TikTok</a>
+      <a class="social" href="https://www.instagram.com/flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="instagram">Instagram</a>
+      <a class="social" href="https://x.com/flyguyapp" target="_blank" rel="noopener" data-umami-event="social-click" data-umami-event-platform="x">X</a>
+    </div>
+
+    <ol class="issue-grid" id="issue-grid"></ol>
+  </main>
+
+  <section class="final">
+    <div class="sky" aria-hidden="true">
+      <img class="cloud c2" src="../assets/cloud-2.png" alt="" />
+    </div>
+    <h2 class="final-title">Can't wait?</h2>
+    <p>The game is already live. Get on the MOST WANTED list before Issue #1 drops.</p>
+    <a class="btn btn-play btn-big" href="../play/" data-umami-event="play-click" data-umami-event-button="files-final">Play Fly Guy</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand brand-dark" href="../">FLY GUY</a>
+      <nav>
+        <a href="../#how-to-play">How to play</a>
+        <a href="../#leaderboard">Leaderboard</a>
+        <a href="./">Comics</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="mailto:flyguygameapp@proton.me">Support</a>
+      </nav>
+      <p class="fine">© 2026 Fly Guy · an <a href="https://imgdoesit.com">imgdoesit</a> project</p>
+    </div>
+  </footer>
+
+  <script>
+    // When an issue is released, set its `url` (the video or panel page) and it unlocks.
+    const issues = [
+      { n: 1, title: 'Sold Out', teaser: 'The sky has price tags now.' },
+      { n: 2, title: 'No Fly Zone', teaser: 'Step one: don\'t.' },
+      { n: 3, title: 'Property Damage', teaser: '500 SKYCOIN. Worth it.' },
+      { n: 4, title: 'Repo', teaser: 'FINAL NOTICE.' },
+      { n: 5, title: 'Coin Operated', teaser: 'Built overnight. Of course.' },
+      { n: 6, title: 'The First Flyer', teaser: '40 years ago...' },
+      { n: 7, title: 'Rent Is Due', teaser: 'Per clause 7(b)...' },
+      { n: 8, title: 'Nobody Fences the Sky', teaser: 'The season finale.' },
+    ];
+
+    const grid = document.getElementById('issue-grid');
+    for (const issue of issues) {
+      const li = document.createElement('li');
+      const released = Boolean(issue.url);
+      li.className = 'issue-card' + (released ? '' : ' locked');
+
+      const cover = document.createElement(released ? 'a' : 'div');
+      cover.className = 'issue-cover';
+      if (released) { cover.href = issue.url; cover.dataset.umamiEvent = 'issue-open'; cover.dataset.umamiEventIssue = issue.n; }
+
+      const num = document.createElement('span');
+      num.className = 'issue-num';
+      num.textContent = '#' + issue.n;
+      const title = document.createElement('span');
+      title.className = 'issue-title';
+      title.textContent = issue.title;
+      const badge = document.createElement('span');
+      badge.className = 'issue-badge';
+      badge.textContent = released ? 'READ NOW' : (issue.n === 1 ? 'FIRST ISSUE · COMING SOON' : 'COMING SOON');
+      cover.append(num, title, badge);
+
+      const teaser = document.createElement('p');
+      teaser.className = 'issue-teaser';
+      teaser.textContent = issue.teaser;
+
+      li.append(cover, teaser);
+      grid.appendChild(li);
+    }
+  </script>
+</body>
+</html>
