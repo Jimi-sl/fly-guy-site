@@ -71,49 +71,32 @@
       };
 
       const now = new Date();
-      let liveParts = 0;
+      const live = window.flyGuyIssueLive(issue, now);
 
-      for (let p = 0; p < issue.parts.length; p++) {
-        const part = issue.parts[p];
-        const partNo = p + 1;
-
-        if (!window.flyGuyPartLive(part, now)) {
-          // The next part to come: say when, then stop.
-          const soon = el('div', 'reader-soon');
-          soon.append(
-            el('p', 'reader-soon-label', `PART ${partNo}`),
-            el('p', 'reader-soon-date', `Drops ${window.flyGuyFormatDay(part.release)}`),
-            el('p', 'reader-soon-follow', 'Follow @flyguyapp so you don\'t miss it.'));
-          body.append(soon);
-          break;
-        }
-
-        liveParts++;
-        body.append(el('p', 'reader-part', `PART ${partNo}`));
-        for (let k = 1; k <= part.panels; k++) {
+      if (!live) {
+        const soon = el('div', 'reader-soon');
+        soon.append(
+          el('p', 'reader-soon-label', `ISSUE #${issue.n}`),
+          el('p', 'reader-soon-date', `Drops ${window.flyGuyFormatDay(issue.release)}`),
+          el('p', 'reader-soon-follow', "Follow @flyguyapp so you don't miss it."));
+        body.append(soon);
+      } else {
+        for (let k = 1; k <= issue.panels; k++) {
           const img = el('img', 'reader-panel');
-          img.src = `../issues/${issue.n}/p${partNo}-${k}.${issue.ext}`;
-          img.alt = `Issue ${issue.n}, part ${partNo}, panel ${k}`;
+          img.src = `../issues/${issue.n}/${k}.${issue.ext}`;
+          img.alt = `Issue ${issue.n}, panel ${k}`;
           img.width = 1080; img.height = 1350;
-          img.loading = k <= 2 && partNo === 1 ? 'eager' : 'lazy';
+          img.loading = k <= 2 ? 'eager' : 'lazy';
           img.decoding = 'async';
           body.append(img);
         }
 
-        // Ad slot between parts: off until AdSense is approved and consent is in place.
-        if (partNo < issue.parts.length) {
-          const slot = el('div', 'ad-slot');
-          slot.dataset.slot = `issue-${issue.n}-after-part-${partNo}`;
-          slot.hidden = true;
-          body.append(slot);
-        }
-      }
+        // Ad slot before the end card: off until AdSense is approved and consent is in place.
+        const slot = el('div', 'ad-slot');
+        slot.dataset.slot = `issue-${issue.n}-end`;
+        slot.hidden = true;
+        body.append(slot);
 
-      if (liveParts === 0) {
-        body.prepend(el('p', 'reader-intro', 'This issue hasn\'t dropped yet.'));
-      }
-
-      if (liveParts === issue.parts.length) {
         const end = el('div', 'reader-end');
         end.append(el('p', 'reader-end-label', `END OF ISSUE #${issue.n}`), el('h2', 'final-title', 'How far can you fly?'));
         const play = el('a', 'btn btn-play btn-big', 'Play Fly Guy');
@@ -124,8 +107,8 @@
 
         const next = issues.find(i => i.n === issue.n + 1);
         if (next) {
-          const nextLive = window.flyGuyPartLive(next.parts[0], now);
-          const link = el('a', 'btn btn-ghost reader-next', nextLive ? `Read Issue #${next.n}: ${next.title}` : `Issue #${next.n} drops ${window.flyGuyFormatDay(next.parts[0].release)}`);
+          const nextLive = window.flyGuyIssueLive(next, now);
+          const link = el('a', 'btn btn-ghost reader-next', nextLive ? `Read Issue #${next.n}: ${next.title}` : `Issue #${next.n} drops ${window.flyGuyFormatDay(next.release)}`);
           link.href = nextLive ? `?issue=${next.n}` : '../';
           end.append(link);
         }
@@ -135,7 +118,7 @@
         }).observe(end);
       }
 
-      track('issue-open', { issue: issue.n, parts: liveParts });
+      track('issue-open', { issue: issue.n, live });
 
       // The theme button only appears if files/audio/theme.mp3 has been uploaded.
       const audio = document.getElementById('theme');

@@ -38,7 +38,7 @@
       <p class="kicker">A comic that moves</p>
       <h1 class="files-title">THE FLY GUY FILES</h1>
       <p class="files-lede">An alien landlord is renting out the sky. One kid with his grandfather's rocket boots says no.</p>
-      <p class="files-status" id="files-status">Issue #1 drops Monday 5 October. New parts every Monday, Wednesday and Friday.</p>
+      <p class="files-status" id="files-status">Issue #1 drops Monday 5 October. A new issue every Monday.</p>
     </div>
   </header>
 
@@ -84,21 +84,19 @@
       const issues = window.FLYGUY_ISSUES;
       const now = new Date();
 
-      // Status line: the next part to drop, or that the season is out.
-      const upcoming = [];
-      issues.forEach(i => i.parts.forEach((part, p) => upcoming.push({ issue: i, partNo: p + 1, part })));
-      const next = upcoming.find(u => !window.flyGuyPartLive(u.part, now));
-      const anyLive = upcoming.some(u => window.flyGuyPartLive(u.part, now));
+      // Status line: the next issue to drop, or that the season is out.
+      const next = issues.find(i => !window.flyGuyIssueLive(i, now));
+      const anyLive = issues.some(i => window.flyGuyIssueLive(i, now));
       const status = document.getElementById('files-status');
       if (!next) status.textContent = 'Season 1 is complete. Read it from the start.';
-      else if (!anyLive) status.textContent = `Issue #1 drops ${window.flyGuyFormatDay(next.part.release)}. New parts every Monday, Wednesday and Friday.`;
-      else status.textContent = `Next: Issue #${next.issue.n}, Part ${next.partNo}, ${window.flyGuyFormatDay(next.part.release)}.`;
+      else if (!anyLive) status.textContent = `Issue #1 drops ${window.flyGuyFormatDay(next.release)}. A new issue every Monday.`;
+      else status.textContent = `Next: Issue #${next.n}, ${window.flyGuyFormatDay(next.release)}. A new issue every Monday.`;
 
       const grid = document.getElementById('issue-grid');
       for (const issue of issues) {
-        const live = issue.parts.filter(part => window.flyGuyPartLive(part, now)).length;
+        const live = window.flyGuyIssueLive(issue, now);
         const li = document.createElement('li');
-        li.className = 'issue-card' + (live ? '' : ' locked') + (!live && next && next.issue === issue ? ' upcoming' : '');
+        li.className = 'issue-card' + (live ? '' : ' locked') + (!live && next === issue ? ' upcoming' : '');
 
         const cover = document.createElement(live ? 'a' : 'div');
         cover.className = 'issue-cover';
@@ -116,9 +114,8 @@
         title.textContent = issue.title;
         const badge = document.createElement('span');
         badge.className = 'issue-badge';
-        badge.textContent = live === issue.parts.length ? 'READ NOW'
-          : live ? `PART ${live} OUT`
-          : next && next.issue === issue ? window.flyGuyFormatDay(issue.parts[0].release).toUpperCase()
+        badge.textContent = live ? 'READ NOW'
+          : next === issue ? window.flyGuyFormatDay(issue.release).toUpperCase()
           : 'COMING SOON';
         cover.append(num, title, badge);
 
