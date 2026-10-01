@@ -74,15 +74,30 @@
     list.appendChild(li);
   }
 
+  const tabs = document.querySelectorAll('.board-tab');
+  let period = 'week';
+  let loadId = 0;
+
+  // "Resets Monday" note under the weekly list
+  const note = document.createElement('p');
+  note.className = 'board-note';
+  list.after(note);
+
   async function loadBoard() {
-    const slow = setTimeout(() => message('Waking up the scoreboard… (first load can take a few seconds)'), 2500);
+    const id = ++loadId;
+    note.textContent = '';
+    const slow = setTimeout(() => message('Waking up the scoreboard…'), 2500);
     try {
-      const res = await fetch(`${API}/game/leaderboard?page=0&pageSize=5`, { signal: AbortSignal.timeout(25000) });
+      const res = await fetch(`${API}/game/leaderboard?page=0&pageSize=5&period=${period}`, { signal: AbortSignal.timeout(25000) });
       if (!res.ok) throw new Error(res.status);
       const data = await res.json();
       clearTimeout(slow);
+      if (id !== loadId) return; // the other tab was picked meanwhile
       const items = (data && data.items) || [];
-      if (!items.length) return message('No scores yet. Be the first on the board!');
+      if (period === 'week') note.textContent = 'Most Wanted resets every Monday.';
+      if (!items.length) {
+        return message(period === 'week' ? 'No runs yet this week. Be the first on the board!' : 'No scores yet. Be the first on the board!');
+      }
 
       list.replaceChildren();
       for (const it of items) {
@@ -101,9 +116,22 @@
       }
     } catch {
       clearTimeout(slow);
-      message('The scoreboard is taking a nap. Check back soon!');
+      if (id === loadId) message('The scoreboard is taking a nap. Check back soon!');
     }
   }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    if (tab.dataset.period === period) return;
+    period = tab.dataset.period;
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on);
+    });
+    if (window.umami) window.umami.track('leaderboard-tab', { period });
+    message('Loading…');
+    loadBoard();
+  }));
 
   loadBoard();
 })();

@@ -167,6 +167,93 @@
     #banner { position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 4; font-size: .85rem; }
     #banner div { background: var(--gold); color: var(--ink); border: 2px solid var(--ink); border-radius: 10px; padding: 6px 10px; margin-top: 6px; }
 
+    /* Challenge links and score sharing (TemplateData/share.js) */
+    [hidden] { display: none !important; }
+    #challenge-line {
+      position: relative;
+      font-weight: 800;
+      background: rgba(26, 26, 46, .55);
+      border-radius: 12px;
+      padding: .45rem .9rem;
+    }
+    #challenge-pill {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      pointer-events: none;
+      font-family: 'Righteous', sans-serif;
+      color: var(--ink);
+      background: var(--gold);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: .3rem .9rem;
+      box-shadow: 0 3px 0 var(--ink);
+    }
+    #share-btn {
+      position: absolute;
+      top: 68%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      white-space: nowrap;
+      font-family: 'Righteous', sans-serif;
+      font-size: 1.15rem;
+      color: #fff;
+      background: var(--flame);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: .7rem 1.6rem;
+      box-shadow: 0 5px 0 var(--ink);
+      cursor: pointer;
+    }
+    #share-btn:active { transform: translate(-50%, 4px); box-shadow: 0 1px 0 var(--ink); }
+    #share-btn:disabled { opacity: .7; }
+    #share-modal {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(10, 10, 25, .72);
+    }
+    .share-card {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+      padding: 14px;
+      color: var(--ink);
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 0 6px 0 var(--ink);
+    }
+    #share-preview { width: 100%; border: 2px solid var(--ink); border-radius: 10px; }
+    .share-actions { display: grid; gap: 8px; }
+    .sbtn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-family: 'Righteous', sans-serif;
+      font-size: 1rem;
+      color: #fff;
+      background: var(--flame);
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      padding: .6rem 1rem;
+      box-shadow: 0 4px 0 var(--ink);
+      cursor: pointer;
+    }
+    .sbtn.ghost { color: var(--ink); background: #fff; }
+
     @media (prefers-reduced-motion: reduce) { .cloud, #loader .guy { animation: none; } }
   </style>
 </head>
@@ -183,6 +270,7 @@
       <h1>FLY GUY</h1>
       <div class="bar"><i id="progress"></i></div>
       <p id="status">Fuelling the rocket boots…</p>
+      <p id="challenge-line" hidden></p>
       <div id="error">
         <b>Can't take off</b>
         <span id="error-text">This browser couldn't start the game.</span>
@@ -192,8 +280,22 @@
     </div>
 
     <div id="banner"></div>
+
+    <div id="challenge-pill" hidden></div>
+    <button id="share-btn" type="button" hidden>Share your score</button>
+    <div id="share-modal" hidden>
+      <div class="share-card">
+        <img id="share-preview" alt="Your Fly Guy MOST WANTED score card" />
+        <div class="share-actions">
+          <a id="share-download" class="sbtn" href="#">Download image</a>
+          <button id="share-copy" class="sbtn" type="button">Copy challenge link</button>
+          <button id="share-close" class="sbtn ghost" type="button">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <script src="TemplateData/share.js"></script>
   <script>
     // Ad bridge used by AdManager.cs (via FlyGuyAds.jslib).
     // No ad network is connected yet: rewarded ads report "not ready" (so the
@@ -246,9 +348,9 @@
       var buildUrl = 'Build';
       var config = {
         arguments: [],
-        dataUrl: buildUrl + '/512a6defd9f2e960cc846758ed327d04.data.unityweb',
-        frameworkUrl: buildUrl + '/6e07b4c42215f1092bc27ee7002567a7.framework.js.unityweb',
-        codeUrl: buildUrl + '/68ec5d1e7f0de97ccfdf52c8dbd350f4.wasm.unityweb',
+        dataUrl: buildUrl + '/055b80802e3e8aeb2187af6089a8bb61.data.unityweb',
+        frameworkUrl: buildUrl + '/55fe2d3ad57beebdd4ec5a21c20fbbfa.framework.js.unityweb',
+        codeUrl: buildUrl + '/44d7d31d2c90d92af2819ec517167f08.wasm.unityweb',
         streamingAssetsUrl: 'StreamingAssets',
         companyName: "Img Does It",
         productName: "Fly Guy",
@@ -259,7 +361,7 @@
       };
 
       var script = document.createElement('script');
-      script.src = buildUrl + '/a5a98f8760762c0f51b9795546222885.loader.js';
+      script.src = buildUrl + '/69860025ced3c916c70ebd541f30c50d.loader.js';
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           lastProgress = progress;
