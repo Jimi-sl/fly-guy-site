@@ -253,6 +253,18 @@
       cursor: pointer;
     }
     .sbtn.ghost { color: var(--ink); background: #fff; }
+    .share-toast {
+      margin: 0;
+      font-weight: 800;
+      font-size: .9rem;
+      text-align: center;
+      color: var(--ink);
+      background: var(--gold);
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: .5rem .7rem;
+      word-break: break-word;
+    }
 
     @media (prefers-reduced-motion: reduce) { .cloud, #loader .guy { animation: none; } }
   </style>
@@ -287,8 +299,10 @@
       <div class="share-card">
         <img id="share-preview" alt="Your Fly Guy MOST WANTED score card" />
         <div class="share-actions">
-          <a id="share-download" class="sbtn" href="#">Download image</a>
-          <button id="share-copy" class="sbtn" type="button">Copy challenge link</button>
+          <button id="share-image" class="sbtn" type="button">Share image</button>
+          <button id="share-link" class="sbtn" type="button">Share link</button>
+          <button id="share-copy" class="sbtn ghost" type="button">Copy caption</button>
+          <p id="share-toast" class="share-toast" role="status" hidden></p>
           <button id="share-close" class="sbtn ghost" type="button">Close</button>
         </div>
       </div>
@@ -348,9 +362,9 @@
       var buildUrl = 'Build';
       var config = {
         arguments: [],
-        dataUrl: buildUrl + '/055b80802e3e8aeb2187af6089a8bb61.data.unityweb',
+        dataUrl: buildUrl + '/f6aea794f1b5d7a2dafe2ae546c427d3.data.unityweb',
         frameworkUrl: buildUrl + '/55fe2d3ad57beebdd4ec5a21c20fbbfa.framework.js.unityweb',
-        codeUrl: buildUrl + '/44d7d31d2c90d92af2819ec517167f08.wasm.unityweb',
+        codeUrl: buildUrl + '/4613e39db2c3d99ea800b88879fcdfc5.wasm.unityweb',
         streamingAssetsUrl: 'StreamingAssets',
         companyName: "Img Does It",
         productName: "Fly Guy",
@@ -361,7 +375,7 @@
       };
 
       var script = document.createElement('script');
-      script.src = buildUrl + '/69860025ced3c916c70ebd541f30c50d.loader.js';
+      script.src = buildUrl + '/60d4b36071d7a0d9f343b53bc37b4fad.loader.js';
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           lastProgress = progress;

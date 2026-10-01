@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Short challenge links printed on score cards (/?c=123) go straight to the game -->
+  <script>if (/[?&]c=\d+/.test(location.search)) location.replace('play/' + location.search);</script>
   <title>Fly Guy — Play Free in Your Browser</title>
   <meta name="description" content="A Black boy with rocket boots takes to the skies. Dodge walls, blast drones and climb the global leaderboard. Play free in your browser." />
   <meta name="theme-color" content="#0288D1" />

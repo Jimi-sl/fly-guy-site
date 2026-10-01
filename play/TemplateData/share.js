@@ -9,15 +9,18 @@
   var shareBtn = document.getElementById('share-btn');
   var modal = document.getElementById('share-modal');
   var modalImg = document.getElementById('share-preview');
-  var downloadLink = document.getElementById('share-download');
+  var imageBtn = document.getElementById('share-image');
+  var linkBtn = document.getElementById('share-link');
   var copyBtn = document.getElementById('share-copy');
   var closeBtn = document.getElementById('share-close');
+  var toast = document.getElementById('share-toast');
   var pill = document.getElementById('challenge-pill');
   var loaderLine = document.getElementById('challenge-line');
 
   var challenge = null; // { displayName, score } from the link this visitor arrived on
   var run = null;       // the run currently on the game-over screen
   var cardUrl = null;
+  var cardBlob = null;
 
   // --- Challenge links: /play/?c=<id> -----------------------------------------
   var params = new URLSearchParams(location.search);
@@ -45,14 +48,30 @@
     return r.challengeId ? SITE + '/play/?c=' + r.challengeId + '&' + query : SITE + '/?' + query;
   }
 
+  // Short form printed on the card, for when an app drops the caption: the homepage forwards ?c= to the game.
+  function shortLink(r) {
+    return r.challengeId ? 'flyguy.imgdoesit.com/?c=' + r.challengeId : 'flyguy.imgdoesit.com';
+  }
+
   function beatChallenge(r) {
     return challenge && r.score > challenge.score;
   }
 
-  function shareText(r) {
-    var rank = r.weeklyRank ? " and I'm #" + r.weeklyRank + " on this week's MOST WANTED list" : '';
+  // The stamp only claims a rank when this run is the player's best this week.
+  function isWeeklyBest(r) {
+    return r.weeklyRank > 0 && r.score >= r.weeklyBest;
+  }
+
+  function captionText(r) {
     var beat = beatChallenge(r) ? 'I just beat ' + challenge.displayName + '. ' : '';
-    return beat + 'I scored ' + r.score.toLocaleString() + ' on Fly Guy' + rank + '. Think you can beat it? ' + challengeLink(r);
+    var rank = isWeeklyBest(r)
+      ? " and I'm #" + r.weeklyRank + " on this week's MOST WANTED list"
+      : r.weeklyRank ? ' (my best this week is ' + r.weeklyBest.toLocaleString() + ', #' + r.weeklyRank + ' on MOST WANTED)' : '';
+    return beat + 'I scored ' + r.score.toLocaleString() + ' on Fly Guy' + rank + '. Think you can beat it?';
+  }
+
+  function shareText(r) {
+    return captionText(r) + ' ' + challengeLink(r);
   }
 
   // --- The score card -------------------------------------------------------------
@@ -128,10 +147,14 @@
       ctx.fillText(r.score.toLocaleString(), 0, fy + fh + 235);
       ctx.fillStyle = ink; ctx.font = '700 32px ' + body;
       ctx.fillText('POINTS  ·  ' + r.kills + (r.kills === 1 ? ' DRONE' : ' DRONES') + ' DOWN', 0, fy + fh + 285);
+      if (r.weeklyRank > 0 && !isWeeklyBest(r)) {
+        ctx.fillStyle = red; ctx.font = '800 30px ' + body;
+        ctx.fillText("THIS WEEK'S BEST: " + r.weeklyBest.toLocaleString() + '  (#' + r.weeklyRank + ')', 0, fy + fh + 335);
+      }
       ctx.restore();
 
       // Rank stamp
-      if (r.weeklyRank) {
+      if (isWeeklyBest(r)) {
         ctx.save();
         ctx.translate(800, 640);
         ctx.rotate(-0.16);
@@ -153,56 +176,95 @@
       fitText(ctx, line, W - 120, 64, display);
       ctx.strokeText(line, W / 2, 1238); ctx.fillText(line, W / 2, 1238);
       ctx.font = '700 36px ' + body; ctx.fillStyle = ink;
-      ctx.fillText('flyguy.imgdoesit.com', W / 2, 1300);
+      ctx.fillText(shortLink(r), W / 2, 1300);
 
       return new Promise(function (resolve) { canvas.toBlob(resolve, 'image/png'); });
     });
   }
 
   // --- Sharing ------------------------------------------------------------------
-  function openModal(blob, r) {
-    if (cardUrl) URL.revokeObjectURL(cardUrl);
-    cardUrl = URL.createObjectURL(blob);
-    modalImg.src = cardUrl;
-    downloadLink.href = cardUrl;
-    downloadLink.download = 'fly-guy-score-' + r.score + '.png';
-    copyBtn.textContent = 'Copy challenge link';
-    modal.hidden = false;
-    track('share-score', { method: 'modal', weeklyRank: r.weeklyRank || 0 });
+  // The Share button always opens the preview, so the player chooses: the image (some apps
+  // drop any text sent with it, so the caption is copied for pasting), the link alone
+  // (every app keeps it), or just the caption.
+  function showToast(text) {
+    toast.textContent = text;
+    toast.hidden = false;
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(function () { toast.hidden = true; }, 4000);
   }
 
-  function share() {
+  function copyCaption(r) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(shareText(r)).then(function () { return true; }, function () { return false; });
+    }
+    return Promise.resolve(false);
+  }
+
+  function openPreview() {
     if (!run) return;
     var r = run;
     shareBtn.disabled = true;
     drawCard(r).then(function (blob) {
       shareBtn.disabled = false;
       if (!blob) return;
-      var file = new File([blob], 'fly-guy-score.png', { type: 'image/png' });
-      var text = shareText(r);
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        return navigator.share({ files: [file], text: text })
-          .then(function () { track('share-score', { method: 'native', weeklyRank: r.weeklyRank || 0 }); })
-          .catch(function (e) { if (e && e.name !== 'AbortError') openModal(blob, r); });
-      }
-      openModal(blob, r);
+      cardBlob = blob;
+      if (cardUrl) URL.revokeObjectURL(cardUrl);
+      cardUrl = URL.createObjectURL(blob);
+      modalImg.src = cardUrl;
+      toast.hidden = true;
+      modal.hidden = false;
+      track('share-open', { weeklyRank: r.weeklyRank || 0 });
     }).catch(function () { shareBtn.disabled = false; });
   }
 
-  shareBtn.addEventListener('click', share);
-  closeBtn.addEventListener('click', function () { modal.hidden = true; });
-  modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
-  downloadLink.addEventListener('click', function () { track('share-download'); });
+  function shareImage() {
+    if (!run || !cardBlob) return;
+    var r = run;
+    var copied = copyCaption(r); // start while the tap still counts as a user gesture
+    var file = new File([cardBlob], 'fly-guy-score.png', { type: 'image/png' });
+    copied.then(function (ok) { if (ok) showToast('Caption with your challenge link copied. Paste it with the image.'); });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], text: shareText(r) })
+        .then(function () { track('share-score', { method: 'image', weeklyRank: r.weeklyRank || 0 }); })
+        .catch(function () {});
+      return;
+    }
+    var a = document.createElement('a'); // desktop: save the image instead
+    a.href = cardUrl;
+    a.download = 'fly-guy-score-' + r.score + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    track('share-score', { method: 'download', weeklyRank: r.weeklyRank || 0 });
+  }
+
+  function shareLink() {
+    if (!run) return;
+    var r = run;
+    if (navigator.share) {
+      navigator.share({ title: 'Fly Guy', text: captionText(r), url: challengeLink(r) })
+        .then(function () { track('share-score', { method: 'link', weeklyRank: r.weeklyRank || 0 }); })
+        .catch(function () {});
+      return;
+    }
+    copyCaption(r).then(function (ok) {
+      showToast(ok ? 'Challenge link copied.' : challengeLink(r));
+      if (ok) track('share-score', { method: 'copy-link', weeklyRank: r.weeklyRank || 0 });
+    });
+  }
+
+  shareBtn.addEventListener('click', openPreview);
+  imageBtn.addEventListener('click', shareImage);
+  linkBtn.addEventListener('click', shareLink);
   copyBtn.addEventListener('click', function () {
     if (!run) return;
-    var link = challengeLink(run);
-    var done = function () { copyBtn.textContent = 'Link copied'; track('share-copy-link'); };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(shareText(run)).then(done, function () { window.prompt('Copy this link:', link); });
-    } else {
-      window.prompt('Copy this link:', link);
-    }
+    var r = run;
+    copyCaption(r).then(function (ok) {
+      showToast(ok ? 'Caption copied.' : shareText(r));
+      if (ok) track('share-score', { method: 'copy-caption', weeklyRank: r.weeklyRank || 0 });
+    });
   });
+  closeBtn.addEventListener('click', function () { modal.hidden = true; });
+  modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
 
   window.flyGuyShare = {
     show: function (r) {
