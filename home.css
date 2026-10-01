@@ -642,9 +642,92 @@ a.issue-cover:hover { transform: translateY(-4px) rotate(-1deg); }
   padding: .2rem .6rem;
 }
 .issue-card.locked .issue-cover { filter: saturate(.35) brightness(.9); }
-.issue-card.locked:first-child .issue-cover { filter: none; box-shadow: 0 7px 0 var(--ink), 0 0 0 4px var(--gold); }
-.issue-card.locked:first-child .issue-badge { background: var(--gold); }
+.issue-card.upcoming .issue-cover { filter: none; box-shadow: 0 7px 0 var(--ink), 0 0 0 4px var(--gold); }
+.issue-card.upcoming .issue-badge { background: var(--gold); }
+.issue-cover.has-art { background-size: cover; background-position: center; }
+.issue-cover.has-art .issue-num, .issue-cover.has-art .issue-title { visibility: hidden; }
 .issue-teaser { font-weight: 700; color: #4a5068; font-size: .95rem; }
+
+/* ---------- Comic reader ---------- */
+.reader-page { background: var(--paper); }
+.reader-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .7rem clamp(16px, 4vw, 32px);
+  background: var(--sky-top);
+  border-bottom: 3px solid var(--ink);
+}
+.reader-top .brand { font-size: 1.3rem; }
+.reader-back { margin-left: auto; color: var(--white); font-weight: 800; text-decoration: none; }
+.reader-back:hover { text-decoration: underline; }
+.reader { max-width: 600px; margin: 0 auto; padding: 1.8rem 0 3.5rem; }
+.reader-head { text-align: center; padding: 0 16px 1.2rem; }
+.reader-issue {
+  display: inline-block;
+  font-family: 'Righteous', sans-serif;
+  letter-spacing: .06em;
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: .2rem .8rem;
+}
+.reader-title {
+  margin-top: .6rem;
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
+  color: var(--ink);
+  text-shadow: 3px 4px 0 var(--gold), 6px 8px 0 var(--flame);
+}
+.theme-btn {
+  margin-top: 1rem;
+  font-family: 'Righteous', sans-serif;
+  font-size: 1rem;
+  color: var(--white);
+  background: var(--ink);
+  border: 0;
+  border-radius: 999px;
+  padding: .5rem 1.1rem;
+  cursor: pointer;
+}
+.reader-part {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: 1.6rem 16px .9rem;
+  font-family: 'Righteous', sans-serif;
+  letter-spacing: .08em;
+  color: var(--ink);
+}
+.reader-part::before, .reader-part::after { content: ''; flex: 1; height: 3px; background: var(--ink); }
+.reader-panel {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--sky-low);
+  border-block: 3px solid var(--ink);
+}
+.reader-panel + .reader-panel { border-top: 0; }
+.reader-intro { text-align: center; font-weight: 800; color: #4a5068; }
+.reader-soon, .reader-end {
+  margin: 2rem 16px 0;
+  text-align: center;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 0 var(--ink);
+  padding: 1.6rem 1.2rem;
+}
+.reader-soon-label, .reader-end-label { font-family: 'Righteous', sans-serif; letter-spacing: .08em; color: var(--flame-dark); }
+.reader-soon-date { margin-top: .3rem; font-family: 'Righteous', sans-serif; font-size: 1.6rem; color: var(--ink); }
+.reader-soon-follow { margin-top: .5rem; font-weight: 700; color: #4a5068; }
+.reader-end .final-title { margin: .5rem 0 1.4rem; font-size: clamp(2rem, 7vw, 2.8rem); color: var(--white); }
+.reader-next { display: flex; width: fit-content; margin: 1rem auto 0; height: auto; min-height: 3rem; padding: .5rem 1.4rem; font-size: 1rem; text-align: center; }
+@media (min-width: 640px) {
+  .reader-panel { border-inline: 3px solid var(--ink); }
+}
 
 /* ---------- Document pages (privacy) ---------- */
 .doc-hero {

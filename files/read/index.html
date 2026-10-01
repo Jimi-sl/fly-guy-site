@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Read — The Fly Guy Files</title>
+  <meta name="description" content="Read The Fly Guy Files: an alien landlord is renting out the sky, and one kid with rocket boots says no." />
+  <meta name="theme-color" content="#0288D1" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Fly Guy Files" />
+  <meta property="og:description" content="The sky is for sale. Read the comic, then play the game." />
+  <meta property="og:image" content="https://flyguy.imgdoesit.com/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../home.css" />
+  <script defer src="https://stats.flyguy.imgdoesit.com/fg.js" data-website-id="c32b8988-3fd1-4fd2-abe9-5b8b0f571b9f" data-domains="flyguy.imgdoesit.com"></script>
+</head>
+<body class="reader-page">
+
+  <header class="reader-top">
+    <a class="brand" href="../../">FLY GUY</a>
+    <a class="reader-back" href="../">All issues</a>
+    <a class="btn btn-play btn-small" href="../../play/" data-umami-event="play-click" data-umami-event-button="reader-top">Play</a>
+  </header>
+
+  <main class="reader">
+    <div class="reader-head">
+      <p class="reader-issue" id="issue-number"></p>
+      <h1 class="reader-title" id="issue-title"></h1>
+      <button class="theme-btn" id="theme-btn" type="button" hidden>&#9835; Play the theme</button>
+      <audio id="theme" src="../../audio/theme.mp3" preload="none" loop></audio>
+    </div>
+    <div id="reader-body"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand brand-dark" href="../../">FLY GUY</a>
+      <nav>
+        <a href="../">Comics</a>
+        <a href="../../#leaderboard">Leaderboard</a>
+        <a href="../../privacy.html">Privacy</a>
+      </nav>
+      <p class="fine">© 2026 Fly Guy · an <a href="https://imgdoesit.com">imgdoesit</a> project</p>
+    </div>
+  </footer>
+
+  <script src="../issues.js"></script>
+  <script>
+    (() => {
+      const track = (name, data) => { if (window.umami) window.umami.track(name, data); };
+      const issues = window.FLYGUY_ISSUES;
+      const n = parseInt(new URLSearchParams(location.search).get('issue'), 10);
+      const issue = issues.find(i => i.n === n);
+      if (!issue) { location.replace('../'); return; }
+
+      document.title = `Issue #${issue.n}: ${issue.title} — The Fly Guy Files`;
+      document.getElementById('issue-number').textContent = `ISSUE #${issue.n}`;
+      document.getElementById('issue-title').textContent = issue.title;
+
+      const body = document.getElementById('reader-body');
+      const el = (tag, cls, text) => {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text) e.textContent = text;
+        return e;
+      };
+
+      const now = new Date();
+      let liveParts = 0;
+
+      for (let p = 0; p < issue.parts.length; p++) {
+        const part = issue.parts[p];
+        const partNo = p + 1;
+
+        if (!window.flyGuyPartLive(part, now)) {
+          // The next part to come: say when, then stop.
+          const soon = el('div', 'reader-soon');
+          soon.append(
+            el('p', 'reader-soon-label', `PART ${partNo}`),
+            el('p', 'reader-soon-date', `Drops ${window.flyGuyFormatDay(part.release)}`),
+            el('p', 'reader-soon-follow', 'Follow @flyguyapp so you don\'t miss it.'));
+          body.append(soon);
+          break;
+        }
+
+        liveParts++;
+        body.append(el('p', 'reader-part', `PART ${partNo}`));
+        for (let k = 1; k <= part.panels; k++) {
+          const img = el('img', 'reader-panel');
+          img.src = `../issues/${issue.n}/p${partNo}-${k}.${issue.ext}`;
+          img.alt = `Issue ${issue.n}, part ${partNo}, panel ${k}`;
+          img.width = 1080; img.height = 1350;
+          img.loading = k <= 2 && partNo === 1 ? 'eager' : 'lazy';
+          img.decoding = 'async';
+          body.append(img);
+        }
+
+        // Ad slot between parts: off until AdSense is approved and consent is in place.
+        if (partNo < issue.parts.length) {
+          const slot = el('div', 'ad-slot');
+          slot.dataset.slot = `issue-${issue.n}-after-part-${partNo}`;
+          slot.hidden = true;
+          body.append(slot);
+        }
+      }
+
+      if (liveParts === 0) {
+        body.prepend(el('p', 'reader-intro', 'This issue hasn\'t dropped yet.'));
+      }
+
+      if (liveParts === issue.parts.length) {
+        const end = el('div', 'reader-end');
+        end.append(el('p', 'reader-end-label', `END OF ISSUE #${issue.n}`), el('h2', 'final-title', 'How far can you fly?'));
+        const play = el('a', 'btn btn-play btn-big', 'Play Fly Guy');
+        play.href = '../../play/';
+        play.dataset.umamiEvent = 'play-click';
+        play.dataset.umamiEventButton = 'reader-end';
+        end.append(play);
+
+        const next = issues.find(i => i.n === issue.n + 1);
+        if (next) {
+          const nextLive = window.flyGuyPartLive(next.parts[0], now);
+          const link = el('a', 'btn btn-ghost reader-next', nextLive ? `Read Issue #${next.n}: ${next.title}` : `Issue #${next.n} drops ${window.flyGuyFormatDay(next.parts[0].release)}`);
+          link.href = nextLive ? `?issue=${next.n}` : '../';
+          end.append(link);
+        }
+        body.append(end);
+        new IntersectionObserver((entries, obs) => {
+          if (entries[0].isIntersecting) { track('issue-finished', { issue: issue.n }); obs.disconnect(); }
+        }).observe(end);
+      }
+
+      track('issue-open', { issue: issue.n, parts: liveParts });
+
+      // The theme button only appears if files/audio/theme.mp3 has been uploaded.
+      const audio = document.getElementById('theme');
+      const themeBtn = document.getElementById('theme-btn');
+      fetch(audio.src, { method: 'HEAD' }).then(r => { if (r.ok) themeBtn.hidden = false; }).catch(() => {});
+      themeBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play().then(() => { themeBtn.textContent = '❚❚ Pause the theme'; track('theme-play'); }).catch(() => {});
+        } else {
+          audio.pause();
+          themeBtn.innerHTML = '&#9835; Play the theme';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

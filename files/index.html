@@ -38,7 +38,7 @@
       <p class="kicker">A comic that moves</p>
       <h1 class="files-title">THE FLY GUY FILES</h1>
       <p class="files-lede">An alien landlord is renting out the sky. One kid with his grandfather's rocket boots says no.</p>
-      <p class="files-status">Issue #1 drops Monday 5 October. New parts every Monday, Wednesday and Friday.</p>
+      <p class="files-status" id="files-status">Issue #1 drops Monday 5 October. New parts every Monday, Wednesday and Friday.</p>
     </div>
   </header>
 
@@ -78,47 +78,63 @@
     </div>
   </footer>
 
+  <script src="issues.js"></script>
   <script>
-    // When an issue is released, set its `url` (the video or panel page) and it unlocks.
-    const issues = [
-      { n: 1, title: 'Sold Out', teaser: 'The sky has price tags now.' },
-      { n: 2, title: 'No Fly Zone', teaser: 'Step one: don\'t.' },
-      { n: 3, title: 'Property Damage', teaser: '500 SKYCOIN. Worth it.' },
-      { n: 4, title: 'Repo', teaser: 'FINAL NOTICE.' },
-      { n: 5, title: 'Coin Operated', teaser: 'Built overnight. Of course.' },
-      { n: 6, title: 'The First Flyer', teaser: '40 years ago...' },
-      { n: 7, title: 'Rent Is Due', teaser: 'Per clause 7(b)...' },
-      { n: 8, title: 'Nobody Fences the Sky', teaser: 'The season finale.' },
-    ];
+    (() => {
+      const issues = window.FLYGUY_ISSUES;
+      const now = new Date();
 
-    const grid = document.getElementById('issue-grid');
-    for (const issue of issues) {
-      const li = document.createElement('li');
-      const released = Boolean(issue.url);
-      li.className = 'issue-card' + (released ? '' : ' locked');
+      // Status line: the next part to drop, or that the season is out.
+      const upcoming = [];
+      issues.forEach(i => i.parts.forEach((part, p) => upcoming.push({ issue: i, partNo: p + 1, part })));
+      const next = upcoming.find(u => !window.flyGuyPartLive(u.part, now));
+      const anyLive = upcoming.some(u => window.flyGuyPartLive(u.part, now));
+      const status = document.getElementById('files-status');
+      if (!next) status.textContent = 'Season 1 is complete. Read it from the start.';
+      else if (!anyLive) status.textContent = `Issue #1 drops ${window.flyGuyFormatDay(next.part.release)}. New parts every Monday, Wednesday and Friday.`;
+      else status.textContent = `Next: Issue #${next.issue.n}, Part ${next.partNo}, ${window.flyGuyFormatDay(next.part.release)}.`;
 
-      const cover = document.createElement(released ? 'a' : 'div');
-      cover.className = 'issue-cover';
-      if (released) { cover.href = issue.url; cover.dataset.umamiEvent = 'issue-open'; cover.dataset.umamiEventIssue = issue.n; }
+      const grid = document.getElementById('issue-grid');
+      for (const issue of issues) {
+        const live = issue.parts.filter(part => window.flyGuyPartLive(part, now)).length;
+        const li = document.createElement('li');
+        li.className = 'issue-card' + (live ? '' : ' locked') + (!live && next && next.issue === issue ? ' upcoming' : '');
 
-      const num = document.createElement('span');
-      num.className = 'issue-num';
-      num.textContent = '#' + issue.n;
-      const title = document.createElement('span');
-      title.className = 'issue-title';
-      title.textContent = issue.title;
-      const badge = document.createElement('span');
-      badge.className = 'issue-badge';
-      badge.textContent = released ? 'READ NOW' : (issue.n === 1 ? 'MONDAY 5 OCTOBER' : 'COMING SOON');
-      cover.append(num, title, badge);
+        const cover = document.createElement(live ? 'a' : 'div');
+        cover.className = 'issue-cover';
+        if (live) {
+          cover.href = `read/?issue=${issue.n}`;
+          cover.dataset.umamiEvent = 'issue-open';
+          cover.dataset.umamiEventIssue = issue.n;
+        }
 
-      const teaser = document.createElement('p');
-      teaser.className = 'issue-teaser';
-      teaser.textContent = issue.teaser;
+        const num = document.createElement('span');
+        num.className = 'issue-num';
+        num.textContent = '#' + issue.n;
+        const title = document.createElement('span');
+        title.className = 'issue-title';
+        title.textContent = issue.title;
+        const badge = document.createElement('span');
+        badge.className = 'issue-badge';
+        badge.textContent = live === issue.parts.length ? 'READ NOW'
+          : live ? `PART ${live} OUT`
+          : next && next.issue === issue ? window.flyGuyFormatDay(issue.parts[0].release).toUpperCase()
+          : 'COMING SOON';
+        cover.append(num, title, badge);
 
-      li.append(cover, teaser);
-      grid.appendChild(li);
-    }
+        // Show the drawn cover if it has been uploaded.
+        const art = new Image();
+        art.onload = () => { cover.style.backgroundImage = `url(${art.src})`; cover.classList.add('has-art'); };
+        art.src = `issues/${issue.n}/cover.${issue.ext}`;
+
+        const teaser = document.createElement('p');
+        teaser.className = 'issue-teaser';
+        teaser.textContent = issue.teaser;
+
+        li.append(cover, teaser);
+        grid.appendChild(li);
+      }
+    })();
   </script>
 </body>
 </html>
