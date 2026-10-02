@@ -1,0 +1,5 @@
+# Files Cloudflare must not upload or serve.
+.git
+.github
+.assetsignore
+CNAME
