@@ -10,3 +10,8 @@
 # Comic panels can be re-exported under the same name, so cache them for a day.
 /files/issues/*
   Cache-Control: public, max-age=86400
+
+# Temporary: Brotli serving test
+/br-test/*.js.br
+  Content-Encoding: br
+  Content-Type: application/javascript
