@@ -15,3 +15,5 @@
 /br-test/*.js.br
   Content-Encoding: br
   Content-Type: application/javascript
+/br-test/*.data
+  Content-Type: application/wasm
