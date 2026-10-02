@@ -11,9 +11,10 @@
 /files/issues/*
   Cache-Control: public, max-age=86400
 
-# Temporary: Brotli serving test
-/br-test/*.js.br
-  Content-Encoding: br
-  Content-Type: application/javascript
-/br-test/*.data
+# Uncompressed test build: Cloudflare Brotli-compresses on the fly, but only for content
+# types on its list, which doesn't include the .data file's default type.
+/play-test/Build/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/play-test/Build/*.data
   Content-Type: application/wasm
