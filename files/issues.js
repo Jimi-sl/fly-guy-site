@@ -7,7 +7,7 @@
 //   3. It appears at its `release` date and time (West Africa Time). Uploading early is fine.
 // Optional: files/issues/<issue>/cover.<ext> for the cover, and audio/theme.mp3 (site root) for the theme music.
 window.FLYGUY_ISSUES = [
-  { n: 1, title: 'Sold Out', teaser: 'The sky has price tags now.', ext: 'jpg', release: '2026-10-06T07:00:00+01:00', panels: 0 },
+  { n: 1, title: 'Sold Out', teaser: 'The sky has price tags now.', ext: 'jpg', release: '2026-10-06T07:00:00+01:00', panels: 9 },
   { n: 2, title: 'No Fly Zone', teaser: "Step one: don't.", ext: 'jpg', release: '2026-10-12T07:00:00+01:00', panels: 0 },
   { n: 3, title: 'Property Damage', teaser: '500 SKYCOIN. Worth it.', ext: 'jpg', release: '2026-10-19T07:00:00+01:00', panels: 0 },
   { n: 4, title: 'Repo', teaser: 'FINAL NOTICE.', ext: 'jpg', release: '2026-10-26T07:00:00+01:00', panels: 0 },
