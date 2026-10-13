@@ -17,11 +17,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Manrope:wght@700;800&display=swap" rel="stylesheet" />
   <!-- Umami analytics (only records on flyguy.imgdoesit.com). fgTrack queues events until it loads. -->
   <script>
-    window.fgTrack = function (name, data) {
-      var u = window.umami;
-      if (u && u.track) u.track(name, data);
-      else (window.fgQueue = window.fgQueue || []).push([name, data]);
-    };
+    (function () {
+      function send(name, data) {
+        var u = window.umami;
+        if (u && u.track) u.track(name, data);
+        else (window.fgQueue = window.fgQueue || []).push([name, data]);
+      }
+
+      // Funnel milestones derived from the game's run events, so Umami can show
+      // loaded -> first run -> first run finished -> second run, and who comes back.
+      var runsStarted = 0, runsEnded = 0;
+      var history = null; // { count, last } play sessions stored on this device
+      try { history = JSON.parse(localStorage.getItem('fg_play_history')); } catch (e) {}
+      var DAY = 86400000;
+
+      function milestones(name, data) {
+        if (name === 'run-start') {
+          runsStarted++;
+          if (runsStarted === 1) {
+            if (history && history.count > 0) {
+              send('returning-player', { visits: history.count + 1, daysAway: Math.floor((Date.now() - history.last) / DAY) });
+            } else {
+              send('first-ever-run');
+            }
+            try { localStorage.setItem('fg_play_history', JSON.stringify({ count: ((history && history.count) || 0) + 1, last: Date.now() })); } catch (e) {}
+          }
+          if (runsStarted === 2) send('second-run');
+          if (runsStarted === 5) send('fifth-run');
+        } else if (name === 'run-end') {
+          runsEnded++;
+          if (runsEnded === 1) send('first-run-end', data);
+        }
+      }
+
+      window.fgPlayer = history && history.count > 0 ? 'returning' : 'new';
+      window.fgTrack = function (name, data) {
+        if (typeof data === 'string') { try { data = JSON.parse(data); } catch (e) {} }
+        send(name, data);
+        milestones(name, data);
+      };
+    })();
     window.fgFlush = function () {
       var q = window.fgQueue || [];
       window.fgQueue = [];
@@ -384,7 +419,7 @@
         }).then(function (unityInstance) {
           window.unityInstance = unityInstance;
           loaded = true;
-          fgTrack('game-loaded', { seconds: seconds() });
+          fgTrack('game-loaded', { seconds: seconds(), player: window.fgPlayer });
           loader.classList.add('done');
           setTimeout(function () { loader.remove(); }, 400);
           canvas.focus();
