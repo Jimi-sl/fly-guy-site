@@ -10,7 +10,7 @@ window.FLYGUY_ISSUES = [
   { n: 1, title: 'Sold Out', teaser: 'The sky has price tags now.', ext: 'jpg', release: '2026-10-06T07:00:00+01:00', panels: 9 },
   { n: 2, title: 'No Fly Zone', teaser: "Step one: don't.", ext: 'jpg', release: '2026-10-12T07:00:00+01:00', panels: 10 },
   { n: 3, title: 'Property Damage', teaser: '500 SKYCOIN. Worth it.', ext: 'jpg', release: '2026-10-19T07:00:00+01:00', panels: 9 },
-  { n: 4, title: 'Repo', teaser: 'FINAL NOTICE.', ext: 'jpg', release: '2026-10-26T07:00:00+01:00', panels: 0 },
+  { n: 4, title: 'Repo', teaser: 'FINAL NOTICE.', ext: 'jpg', release: '2026-10-26T07:00:00+01:00', panels: 10 },
   { n: 5, title: 'Coin Operated', teaser: 'Built overnight. Of course.', ext: 'jpg', release: '2026-11-02T07:00:00+01:00', panels: 0 },
   { n: 6, title: 'The First Flyer', teaser: '40 years ago...', ext: 'jpg', release: '2026-11-09T07:00:00+01:00', panels: 0 },
   { n: 7, title: 'Rent Is Due', teaser: 'Per clause 7(b)...', ext: 'jpg', release: '2026-11-16T07:00:00+01:00', panels: 0 },
